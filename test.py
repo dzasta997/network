@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-from activations import ReLU, Softmax, Sigmoid
+from activations import ReLU, Softmax, Sigmoid, TanH
 from dataset import heart_classification
 from evaluation import BCE
 from initializers import He, Xavier
@@ -10,13 +10,13 @@ from model import NeuralNetwork
 from train import Train
 
 if __name__ == "__main__":
-    learning_rate = 0.0002
-    batch_size = 10
-    epochs = 5000
-    loss_function = BCE()
-
     inputs, outputs = heart_classification()
     inputs_train, inputs_test, outputs_train, outputs_test = train_test_split(inputs, outputs, test_size=0.16)
+
+    learning_rate = 0.02
+    batch_size = inputs_train.shape[0]
+    epochs = 5000
+    loss_function = BCE()
 
     if len(outputs_train.shape) == 1:
         outputs_train = np.reshape(outputs_train, (outputs_train.shape[0], 1))
@@ -25,10 +25,10 @@ if __name__ == "__main__":
     output_dim = outputs_train.shape[1]
     num_of_hidden_layers = 1
 
-    activation = ReLU()
+    activation = TanH()
     activation_output = Sigmoid()
 
-    initialization = He
+    initialization = Xavier
     output_initialization = Xavier
     network = NeuralNetwork(input_dim,
                             hidden_dim,

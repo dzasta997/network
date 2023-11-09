@@ -26,11 +26,11 @@ class TanH:
 
     def forward(self, inputs):
         self.input = inputs
-        self.output = (np.exp(inputs) - np.exp(-1)) / (np.exp(inputs) + np.exp(-1))
+        self.output = np.tanh(inputs)
         return self.output
 
     def backward(self, d_inputs):
-        self.d_input = 1 - np.square(self.forward(d_inputs))
+        self.d_input = 1 - np.square(np.tanh(d_inputs))
         return self.d_input
 
 
@@ -46,7 +46,7 @@ class Sigmoid:
         return self.output
 
     def backward(self, d_inputs):
-        sigmoid = self.forward(self.input)
+        sigmoid = 1 / (1 + np.exp(-self.input))
         self.d_input = d_inputs*sigmoid*(1-sigmoid)
         return self.d_input
 

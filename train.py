@@ -10,7 +10,7 @@ class Train:
         self.loss_function = loss_function
 
     def train(self, inputs, outputs):
-        batch_count = inputs.shape[0]//self.batch_size
+        batch_count = inputs.shape[0] // self.batch_size
         cost = []
         accuracies = []
         for epoch in range(self.epochs):
@@ -31,18 +31,15 @@ class Train:
 
                 self.loss_function.backward(predictions, output_batch)
                 self.network.backward(self.loss_function.d_input)
-                self.optimise()
+                self.optimise(input_batch.shape[0])
 
                 if epoch % 500 == 0:
                     print(f"{epoch}. Accuracy: {accuracy} Loss: {loss.mean()}")
 
         return cost, accuracies
 
-
-    def optimise(self):
+    def optimise(self, batch_size):
         for layer in self.network.layers:
-            layer.weights -= self.learning_rate*layer.d_weights
+            layer.weights -= self.learning_rate * layer.d_weights / batch_size
             layer.bias = layer.bias.reshape(1, -1)
-            layer.bias -= self.learning_rate*layer.d_bias
-
-
+            layer.bias -= self.learning_rate * layer.d_bias / batch_size
