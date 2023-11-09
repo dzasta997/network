@@ -25,10 +25,10 @@ if __name__ == "__main__":
     output_dim = outputs_train.shape[1]
     num_of_hidden_layers = 1
 
-    activation = TanH()
+    activation = ReLU()
     activation_output = Sigmoid()
 
-    initialization = Xavier
+    initialization = He
     output_initialization = Xavier
     network = NeuralNetwork(input_dim,
                             hidden_dim,
