@@ -19,7 +19,7 @@ class Layer:
         self.initializer = initializer((self.input_size, self.neurons))
 
         self.weights = self.initializer.initialize()
-        self.bias = np.zeros(neurons)
+        self.bias = np.random.uniform(size=(neurons, 1), low=-1, high=1)
         self.input = None
         self.output = None
         self.d_weights = None
@@ -30,7 +30,7 @@ class Layer:
 
     def forward(self, input_matrix: NDArray):
         self.input = input_matrix
-        self.output = np.dot(self.input, self.weights)
+        self.output = np.dot(self.input, self.weights) + self.bias
         return self.output
 
     def backward(self, d_error):
