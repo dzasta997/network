@@ -1,5 +1,5 @@
 from model import NeuralNetwork
-
+import statistics
 
 class Train:
     def __init__(self, network: NeuralNetwork, learning_rate: float, batch_size: int, epochs: int, loss_function):
@@ -14,7 +14,8 @@ class Train:
         cost = []
         accuracies = []
         for epoch in range(self.epochs):
-
+            batch_loss = []
+            batch_accuracy = []
             for batch_idx in range(batch_count):
                 start_idx = batch_idx * self.batch_size
                 end_idx = start_idx + self.batch_size
@@ -26,8 +27,9 @@ class Train:
 
                 loss = self.loss_function.forward(predictions, output_batch)
                 accuracy = self.loss_function.accuracy(predictions, output_batch)
-                cost.append(loss.mean())
-                accuracies.append(accuracy)
+
+                batch_loss.append(loss)
+                batch_accuracy.append(accuracy)
 
                 self.loss_function.backward(predictions, output_batch)
                 self.network.backward(self.loss_function.d_input)
@@ -36,10 +38,15 @@ class Train:
                 if epoch % 500 == 0:
                     print(f"{epoch}. Accuracy: {accuracy} Loss: {loss.mean()}")
 
+            cost.append(statistics.mean(batch_loss))
+            accuracies.append(statistics.mean(batch_accuracy))
+
+
+
+
         return cost, accuracies
 
     def optimise(self, batch_size):
         for layer in self.network.layers:
-            layer.weights -= self.learning_rate * layer.d_weights / batch_size
-            layer.bias = layer.bias.reshape(1, -1)
-            layer.bias -= self.learning_rate * layer.d_bias / batch_size
+            layer.weights -= self.learning_rate * layer.d_weights
+            layer.bias = self.learning_rate * layer.d_bias.T

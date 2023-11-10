@@ -20,14 +20,15 @@ class BCE:
     def __init__(self):
         self.d_input = None
 
-    def forward(self, actual, expected, eps=1e-7):
+    def forward(self, actual, expected, eps=10e-10):
         actual = np.clip(actual, eps, 1 - eps)
-        loss = -(expected * np.log(actual) + (1 - expected) * np.log(1 - actual))
+        loss = -(expected * np.log(actual) + (1 - expected) * np.log(1 - actual)).mean()
         return loss
 
-    def backward(self, actual, expected, eps=1e-7):
+    def backward(self, actual, expected, eps=10e-10):
         actual = np.clip(actual, eps, 1 - eps)
-        self.d_input = np.divide((actual - expected), (np.multiply(actual, (1 - actual))))
+        # self.d_input = np.divide((actual - expected), (np.multiply(actual, (1 - actual))))
+        self.d_input = np.divide(1-expected, 1-actual) - np.divide(expected, actual)
         return self.d_input
 
     def accuracy(self, actual, expected):

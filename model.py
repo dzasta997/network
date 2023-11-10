@@ -19,7 +19,7 @@ class Layer:
         self.initializer = initializer((self.input_size, self.neurons))
 
         self.weights = self.initializer.initialize()
-        self.bias = np.random.uniform(size=(neurons, 1), low=-1, high=1)
+        self.bias = np.random.uniform(size=(1, neurons), low=-1, high=1)
         self.input = None
         self.output = None
         self.d_weights = None

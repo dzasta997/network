@@ -15,7 +15,9 @@ class Xavier:
         self.shape = shape
 
     def initialize(self):
-        return np.random.randn(self.shape[0], self.shape[1]) * np.sqrt(6 / self.shape[0] + self.shape[1])
+        limit = np.sqrt(6 / self.shape[0] + self.shape[1])
+        xavier = np.random.uniform(size=(self.shape[0], self.shape[1]), high=limit, low=-limit)
+        return xavier
 
 
 class He:

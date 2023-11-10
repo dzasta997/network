@@ -4,7 +4,7 @@ import re
 import numpy as np
 import cv2
 from scipy import stats
-
+from sklearn.preprocessing import MinMaxScaler
 
 def age_regression():
     directory = "data/raw/FGNET/images"
@@ -33,12 +33,12 @@ def heart_classification(filename: str = "processed.hungarian.data"):
     directory = "data/raw/heart"
     matrix = np.genfromtxt(os.path.join(directory, filename), delimiter=",")
     matrix[np.isnan(matrix)] = 0
-    inputs = matrix[:, :-1]
-
-    inputs = stats.zscore(inputs, axis=None)
+    inputs = matrix[:, :-4]
     outputs = matrix[:, -1]
 
-    return inputs, outputs
+    scaler = MinMaxScaler()
+    normalized_data = scaler.fit_transform(inputs)
+    return normalized_data, outputs
 
 
 

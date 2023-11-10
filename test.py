@@ -13,9 +13,9 @@ if __name__ == "__main__":
     inputs, outputs = heart_classification()
     inputs_train, inputs_test, outputs_train, outputs_test = train_test_split(inputs, outputs, test_size=0.16)
 
-    learning_rate = 0.02
+    learning_rate = 0.00001
     batch_size = inputs_train.shape[0]
-    epochs = 5000
+    epochs = 50000
     loss_function = BCE()
 
     if len(outputs_train.shape) == 1:
